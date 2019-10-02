@@ -58,18 +58,19 @@ cicatriz("no").
 
 
 %machucon debe estar manchada, rugosa y blanda LISTO
-%cicatriz solo eso
+%cicatriz solo eso                             LISTO
 %pedunculo solo pedunculo                      LISTO
-%magulladura perforada
+%magulladura perforada                         LISTO
 %perforacion cicatrizada solo eso
-%fruto gemelo tiene otro fruto y arrugado
-%fruto doble peso alto, arrugado, normal
+%fruto gemelo tiene otro fruto y arrugado      LISTO
+%fruto doble peso alto, arrugado, normal       LISTO
 %sin color, color rosado                       LISTO
 %fruto arrugado piel rugosa                    LISTO
-%madurez excesiva, solo eso
+%madurez excesiva, solo eso                    LISTO
+%partidura cicatrizada, partido y cicatriz     LISTO
 
 
-%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,DOB).
+%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB).
 
 %Predicados
 frutoArrugado(_,_,_,_,_,_,_,TEX,_):- textura(TEX), TEX == "rugosa". 
@@ -100,3 +101,5 @@ cicatriz(_,_,_,COB,_,_,_,_,_,CIC,_):-cobertura(COB),
                                      cicatriz(CIC),
                                      COB=="baja",
     								 CIC == "si".
+
+partiduraCicatrizada(_,_,_,_,_,_,_,_,_,CIC,_,PAR):- cicatriz(CIC), CIC == "si", partidura(PAR), PAR == "si".
