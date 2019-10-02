@@ -61,3 +61,7 @@ pedunculo("no").
 %sin color, color rosado
 %fruto arrugado piel rugosa
 %madurez excesiva, solo eso
+
+contains(X, [X|Xs]).
+contains(X, [Y|Ys]) :-
+    contains(X, Ys).
