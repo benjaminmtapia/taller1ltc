@@ -11,7 +11,7 @@ fallas("magulladura").
 fallas("medialuna").
 fallas("sin color").
 fallas("fruto arrugado").
-fallas("herida cicatrizada").
+fallas("madurez excesiva").
 fallas("perforacion cicatrizada").
 fallas("quemadura solar").
 fallas("sin pedunculo").
@@ -23,6 +23,7 @@ coloracion("rosada").
 coloracion("verde").
 coloracion("roja").
 coloracion("negra").
+coloracion("purpura").
 
 mancha("russet").
 mancha("quemadura de sol").
@@ -51,6 +52,9 @@ pedunculo("no").
 
 doble("si").
 doble("no").
+
+cicatriz("si").
+cicatriz("no").
 
 
 %machucon debe estar manchada, rugosa y blanda LISTO
@@ -82,3 +86,17 @@ frutoDoble(_,_,_,_,_,_,PES,_,)
 pedunculo(_,_,_,_,_,_,_,_,PED):- pedunculo(PED), PED == "si". 
 
 frutoGemelo(_,_,_,_,_,_,_,TEX,_,DOB):- doble(DOB), DOB == "si", textura(TEX), TEX == "rugosa".
+
+madurezExcesiva(_,COL,_,_,TAM,PES,DUR,_,_):-coloracion(COL),
+                                            tamano(TAM),
+    										peso(PES),
+    										dureza(DUR),
+                                            DUR=="baja",
+                                            COL == "negra" ; COL == "purpura",
+    										TAM == "grande",
+    										PES == "alto".
+
+cicatriz(_,_,_,COB,_,_,_,_,_,CIC,_):-cobertura(COB),
+                                     cicatriz(CIC),
+                                     COB=="baja",
+    								 CIC == "si".
