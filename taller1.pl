@@ -51,7 +51,7 @@ pedunculo("no").
 
 
 
-%machucon debe estar manchada, rugosa y blanda
+%machucon debe estar manchada, rugosa y blanda LISTO
 %cicatriz solo eso
 %pedunculo solo pedunculo
 %magulladura perforada
@@ -67,4 +67,7 @@ pedunculo("no").
 
 %Predicados
 frutoArrugado(_,_,_,_,_,_,_,TEX,_):- textura(TEX), TEX == "rugosa". 
-machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),dureza(DUR),textura(TEX).
+machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),
+                                            dureza(DUR),
+                                            DUR=="blanda",
+                                            textura(TEX).
