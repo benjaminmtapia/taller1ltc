@@ -49,6 +49,8 @@ textura("lisa").
 pedunculo("si").
 pedunculo("no").
 
+doble("si").
+doble("no").
 
 
 %machucon debe estar manchada, rugosa y blanda LISTO
@@ -63,7 +65,7 @@ pedunculo("no").
 %madurez excesiva, solo eso
 
 
-%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED).
+%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,DOB).
 
 %Predicados
 frutoArrugado(_,_,_,_,_,_,_,TEX,_):- textura(TEX), TEX == "rugosa". 
@@ -74,3 +76,5 @@ machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),
 sinColor(_,COL,_,_,_,_,_,_,_,"sin color"):- coloracion(COL), COL == "rosada". 
 
 pedunculo(_,_,_,_,_,_,_,_,PED):- pedunculo(PED), PED == "si". 
+
+frutoGemelo(_,_,_,_,_,_,_,TEX,_,DOB):- doble(DOB), DOB == "si", textura(TEX), TEX == "rugosa".
