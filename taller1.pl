@@ -71,9 +71,13 @@ doble("no").
 frutoArrugado(_,_,_,_,_,_,_,TEX,_):- textura(TEX), TEX == "rugosa". 
 machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),
                                             dureza(DUR),
-                                            DUR=="blanda",
-                                            textura(TEX).
+                                            DUR=="baja",
+                                            textura(TEX), TEX=="rugosa".
 sinColor(_,COL,_,_,_,_,_,_,_,"sin color"):- coloracion(COL), COL == "rosada". 
+
+magulladura(PER,_,_,_,_,_,_,_,_):-PER =="si", perforacion(PER).
+
+frutoDoble(_,_,_,_,_,_,PES,_,)
 
 pedunculo(_,_,_,_,_,_,_,_,PED):- pedunculo(PED), PED == "si". 
 
