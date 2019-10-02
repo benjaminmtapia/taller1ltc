@@ -71,3 +71,4 @@ machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),
                                             dureza(DUR),
                                             DUR=="blanda",
                                             textura(TEX).
+sinColor(_,COL,_,_,_,_,_,_,_,"sin color"):- coloracion(COL), COL == "rosada". 
