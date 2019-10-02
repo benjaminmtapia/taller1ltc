@@ -53,13 +53,13 @@ pedunculo("no").
 
 %machucon debe estar manchada, rugosa y blanda LISTO
 %cicatriz solo eso
-%pedunculo solo pedunculo
+%pedunculo solo pedunculo                      LISTO
 %magulladura perforada
 %perforacion cicatrizada solo eso
 %fruto gemelo tiene otro fruto y arrugado
 %fruto doble peso alto, arrugado, normal
-%sin color, color rosado
-%fruto arrugado piel rugosa
+%sin color, color rosado                       LISTO
+%fruto arrugado piel rugosa                    LISTO
 %madurez excesiva, solo eso
 
 
