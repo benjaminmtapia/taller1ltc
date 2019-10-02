@@ -65,3 +65,8 @@ pedunculo("no").
 contains(X, [X|Xs]).
 contains(X, [Y|Ys]) :-
     contains(X, Ys).
+
+%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED).
+
+%Predicados
+frutoArrugado(_,_,_,_,_,_,_,TEX,_):- textura(TEX), TEX == "rugosa". 
