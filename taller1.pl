@@ -72,3 +72,5 @@ machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),
                                             DUR=="blanda",
                                             textura(TEX).
 sinColor(_,COL,_,_,_,_,_,_,_,"sin color"):- coloracion(COL), COL == "rosada". 
+
+pedunculo(_,_,_,_,_,_,_,_,PED):- pedunculo(PED), PED == "si". 
