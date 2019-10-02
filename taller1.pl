@@ -62,11 +62,9 @@ pedunculo("no").
 %fruto arrugado piel rugosa
 %madurez excesiva, solo eso
 
-contains(X, [X|Xs]).
-contains(X, [Y|Ys]) :-
-    contains(X, Ys).
 
 %cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED).
 
 %Predicados
 frutoArrugado(_,_,_,_,_,_,_,TEX,_):- textura(TEX), TEX == "rugosa". 
+machucon(_,_,MAN,_,_,_,DUR,TEX,_,"machucon"):-mancha(MAN),dureza(DUR),textura(TEX).
