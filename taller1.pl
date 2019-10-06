@@ -56,6 +56,23 @@ doble("no").
 cicatriz("si").
 cicatriz("no").
 
+calibre(1,18).
+calibre(2,19).
+calibre(3,20).
+calibre(4,21).
+calibre(5,22).
+calibre(6,23).
+calibre(7,24).
+calibre(8,25).
+calibre(9,26).
+calibre(10,27).
+calibre(11,28).
+calibre(12,29).
+calibre(13,30).
+calibre(14,31).
+calibre(15,32).
+calibre(16,"desecho").
+
 
 %machucon debe estar manchada, rugosa y blanda LISTO
 %cicatriz solo eso                             LISTO
@@ -123,7 +140,14 @@ perforacionCicatrizada(PER,_,_,_,_,_,_,CIC,_,_,"perforacion cicatrizada"):-perfo
                                                     cicatriz(CIC),
                                                     CIC=="si".
 
-detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,B):-machucon(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,MACHUCON),
-                                                                    add_tail([_|_],MACHUCON,A),
-                                                                    sinColor(_,COL,_,_,_,_,_,_,_,_,_,SINCOLOR),
-                                                                    add_tail(A,SINCOLOR,B).
+detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,L):-
+                frutoArrugado(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,A),
+                add_tail([],A,L1),
+                machucon(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,B),
+                add_tail(L1,B,L2),
+                sinColor(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,C),
+                add_tail(L2,C,L3),
+                magulladura(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,D),
+                add_tail(L3,D,L4),
+                frutoDoble(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,E),
+                add_tail(L4,E,L).
