@@ -30,7 +30,7 @@ mancha("quemadura de sol").
 
 cobertura("alto").
 cobertura("medio").
-cobertura("bajo").
+cobertura("baja").
 
 tamano("grande").
 tamano("medio").
@@ -55,6 +55,9 @@ doble("no").
 
 cicatriz("si").
 cicatriz("no").
+
+partidura("si").
+partidura("no").
 
 calibre(1,18).
 calibre(2,19).
@@ -87,67 +90,74 @@ calibre(16,"desecho").
 %partidura cicatrizada, partido y cicatriz     LISTO
 
 %perforacion, color, mancha, cobertura, tamano, peso, dureza, textura, pedunculo, cicatriz, doble
-%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB).
+%cereza(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L)
 
 %Predicados
+add_tail(X,"no",X):-!.
 add_tail([],X,[X]).
-add_tail([H|T],X,[H|L]):-add_tail(T,X,L).
+add_tail([H|T],X,[H|L]):- add_tail(T,X,L).
 
 
-frutoArrugado(_,_,_,_,_,_,_,TEX,_,_,_,"fruto arrugado"):- textura(TEX), TEX == "rugosa". 
-machucon(_,_,MAN,_,_,_,DUR,TEX,_,_,_,"machucon"):-mancha(MAN),
-                                            dureza(DUR),
-                                            DUR=="baja",
-                                            textura(TEX), TEX=="rugosa".
-sinColor(_,COL,_,_,_,_,_,_,_,_,_,"sin color"):- coloracion(COL),
-                                             COL == "rosada". 
 
-magulladura(PER,_,_,_,_,_,_,_,_,_,_,"magulladura"):-PER =="si",
-                                perforacion(PER).
+%DETECCIÓN DE DEFECTOS
+frutoArrugado(TEX,X):- ((textura(TEX), TEX == "rugosa") -> X = "fruto arrugado";
+                                                           X = "no"). 
 
-frutoDoble(_,_,_,_,_,PES,_,_,_,_,DOB,"fruto doble"):-doble(DOB),
-                                                        DOB=="si",
-                                                         peso(PES),
-                                                          PES=="alto".
+machucon(MAN,DUR,TEX,X):- ((mancha(MAN),
+                        dureza(DUR),
+                        DUR == "baja",
+                        textura(TEX), TEX == "rugosa") -> X = "machucon";
+                                                          X = "no").
 
-pedunculo(_,_,_,_,_,_,_,_,PED,_,_,"pedunculo"):- pedunculo(PED), PED == "si". 
+sinColor(COL,X):- ((coloracion(COL), COL == "rosada") -> X = "sin color";
+                                                         X = "no"). 
 
-frutoGemelo(_,_,_,_,_,_,_,_,TEX,_,DOB,"fruto gemelo"):- doble(DOB),
-                                        DOB == "si", 
-                                        textura(TEX), 
-                                        TEX == "rugosa".
+magulladura(PER,X):- ((perforacion(PER),PER == "si") -> X = "magulladura";
+                                                        X = "no" ).
 
-madurezExcesiva(_,COL,_,_,TAM,PES,DUR,_,_,_,_,"madurez excesiva"):-coloracion(COL),
-                                            tamano(TAM),
-    										peso(PES),
-    										dureza(DUR),
-                                            DUR=="baja",
-                                            COL == "negra" ; COL == "purpura",
-    										TAM == "grande",
-    										PES == "alto".
+frutoDoble(PES,DOB,X):- ((doble(DOB), DOB=="si",
+                                      peso(PES),
+                                      PES=="alto") -> X = "fruto doble";
+                                                      X = "no").
 
-cicatriz(_,_,_,COB,_,_,_,_,_,CIC,_,"cicatriz"):-cobertura(COB),
-                                     cicatriz(CIC),
-                                     COB=="baja",
-    								 CIC == "si".
+pedunculo(PED,X):- ((pedunculo(PED), PED == "si") -> X = "sin pedunculo";
+                                                     X = "no"). 
 
-partiduraCicatrizada(_,_,_,_,_,_,_,_,_,CIC,_,PAR):- cicatriz(CIC),
-                                                    CIC == "si", 
-                                                    partidura(PAR), 
-                                                    PAR == "si".
-perforacionCicatrizada(PER,_,_,_,_,_,_,CIC,_,_,"perforacion cicatrizada"):-perforacion(PER),
-                                                    per=="si",
-                                                    cicatriz(CIC),
-                                                    CIC=="si".
+frutoGemelo(TEX,DOB,X):- ((doble(DOB), DOB == "si", 
+                                       textura(TEX), 
+                                       TEX == "rugosa") -> X = "fruto gemelo";
+                                                           X ="no").
 
-detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,L):-
-                frutoArrugado(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,A),
-                add_tail([],A,L1),
-                machucon(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,B),
-                add_tail(L1,B,L2),
-                sinColor(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,C),
-                add_tail(L2,C,L3),
-                magulladura(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,D),
-                add_tail(L3,D,L4),
-                frutoDoble(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,E),
-                add_tail(L4,E,L).
+madurezExcesiva(COL,TAM,PES,DUR,X):-((coloracion(COL),tamano(TAM),peso(PES),
+                                    dureza(DUR),DUR=="baja", (COL == "negra"; 
+                                    COL == "purpura"),TAM == "grande",
+                                    PES == "alto")-> X = "madurez excesiva";
+                                                     X = "no").
+
+cicatriz(COB,CIC,X):-((cobertura(COB), COB == "baja",
+                       cicatriz(CIC), CIC == "si") -> X = "cicatriz";
+                                                     X = "no").
+
+partiduraCicatrizada(CIC,PAR,X):- ((cicatriz(CIC),
+                                  CIC == "si", 
+                                  partidura(PAR), 
+                                  PAR == "si") -> X = "partidura cicatrizada";
+                                                  X = "no").
+
+perforacionCicatrizada(PER,CIC,X):- ((perforacion(PER),
+                                    per=="si",
+                                    cicatriz(CIC),
+                                    CIC=="si") -> X = "perforacion cicatrizada";
+                                                  X = "no").
+
+detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):- 
+                                    frutoArrugado(TEX,A), add_tail([],A,L1),
+                                    machucon(MAN,DUR,TEX,B), add_tail(L1,B,L2),
+                                    sinColor(COL,C), add_tail(L2,C,L3),
+                                    magulladura(PER,D), add_tail(L3,D,L4),
+                                    frutoDoble(PES,DOB,E),add_tail(L4,E,L5),
+                                    pedunculo(PED,F), add_tail(L5,F,L6),
+                                    madurezExcesiva(COL,TAM,PES,DUR,G), add_tail(L6,G,L7),
+                                    cicatriz(COB,CIC,H),add_tail(L7,H,L8),
+                                    partiduraCicatrizada(CIC,PAR,I), add_tail(L8,I,L9),
+                                    perforacionCicatrizada(PER,CIC,J), add_tail(L9,J,L).
