@@ -166,31 +166,3 @@ detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR,LISTA):-
                 quemaduraSolar(COL,L),
                 add_tail(L11,L,L12),
                 delete_all("no",L12,LISTA).
-
-cicatriz(COB,CIC,X):-((cobertura(COB), COB == "baja",
-                       cicatriz(CIC), CIC == "si") -> X = "cicatriz";
-                                                     X = "no").
-
-partiduraCicatrizada(CIC,PAR,X):- ((cicatriz(CIC),
-                                  CIC == "si", 
-                                  partidura(PAR), 
-                                  PAR == "si") -> X = "partidura cicatrizada";
-                                                  X = "no").
-
-perforacionCicatrizada(PER,CIC,X):- ((perforacion(PER),
-                                    per=="si",
-                                    cicatriz(CIC),
-                                    CIC=="si") -> X = "perforacion cicatrizada";
-                                                  X = "no").
-
-detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):- 
-                                    frutoArrugado(TEX,A), add_tail([],A,L1),
-                                    machucon(MAN,DUR,TEX,B), add_tail(L1,B,L2),
-                                    sinColor(COL,C), add_tail(L2,C,L3),
-                                    magulladura(PER,D), add_tail(L3,D,L4),
-                                    frutoDoble(PES,DOB,E),add_tail(L4,E,L5),
-                                    pedunculo(PED,F), add_tail(L5,F,L6),
-                                    madurezExcesiva(COL,TAM,PES,DUR,G), add_tail(L6,G,L7),
-                                    cicatriz(COB,CIC,H),add_tail(L7,H,L8),
-                                    partiduraCicatrizada(CIC,PAR,I), add_tail(L8,I,L9),
-                                    perforacionCicatrizada(PER,CIC,J), add_tail(L9,J,L).
