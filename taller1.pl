@@ -1,21 +1,4 @@
 %Base de conocimiento
-%hechos
-esFruta("cereza").
-esFruta("frutilla").
-esFruta("manzana").
-
-%fallas
-fallas("machucon").
-fallas("cicatriz").
-fallas("magulladura").
-fallas("medialuna").
-fallas("sin color").
-fallas("fruto arrugado").
-fallas("madurez excesiva").
-fallas("perforacion cicatrizada").
-fallas("quemadura solar").
-fallas("sin pedunculo").
-
 perforacion("si").
 perforacion("no").
 
@@ -56,6 +39,9 @@ doble("no").
 cicatriz("si").
 cicatriz("no").
 
+partidura("si").
+partidura("no").
+
 calibre(1,18).
 calibre(2,19).
 calibre(3,20).
@@ -90,64 +76,91 @@ calibre(16,"desecho").
 %cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB).
 
 %Predicados
+%auxiliar para agregar elemento al final de una lista
+%fuente: https://stackoverflow.com/questions/15028831/how-do-you-append-an-element-to-a-list-in-place-in-prolog
 add_tail([],X,[X]).
 add_tail([H|T],X,[H|L]):-add_tail(T,X,L).
 
+%auxiliar para realizar delete mapping en una lista
+%fuente https://www2.cs.arizona.edu/~collberg/Teaching/372/2005/Html/Html-21/
+delete_all(_, [], []).
+delete_all(X, [X|Xs], Y) :-
+    delete_all(X, Xs, Y).
+delete_all(X, [T|Xs], [T|Y]) :-
+    dif(X, T),
+    delete_all(X, Xs, Y).
 
-frutoArrugado(_,_,_,_,_,_,_,TEX,_,_,_,"fruto arrugado"):- textura(TEX), TEX == "rugosa". 
-machucon(_,_,MAN,_,_,_,DUR,TEX,_,_,_,"machucon"):-mancha(MAN),
+frutoArrugado(TEX,DEFECTO):- textura(TEX), TEX == "rugosa",DEFECTO="fruto arrugado";
+                                                            DEFECTO="no". 
+machucon(MAN,DUR,TEX,DEFECTO):-mancha(MAN),
                                             dureza(DUR),
                                             DUR=="baja",
-                                            textura(TEX), TEX=="rugosa".
-sinColor(_,COL,_,_,_,_,_,_,_,_,_,"sin color"):- coloracion(COL),
-                                             COL == "rosada". 
+                                            textura(TEX), TEX=="rugosa",DEFECTO="machucon";DEFECTO="no".
+sinColor(COL,DEFECTO):- coloracion(COL),
+                                             COL == "rosada",DEFECTO="Sin Color";DEFECTO="no". 
 
-magulladura(PER,_,_,_,_,_,_,_,_,_,_,"magulladura"):-PER =="si",
-                                perforacion(PER).
+magulladura(PER,DEFECTO):-PER =="si",
+                                perforacion(PER),DEFECTO="magulladura";DEFECTO="no".
 
-frutoDoble(_,_,_,_,_,PES,_,_,_,_,DOB,"fruto doble"):-doble(DOB),
+frutoDoble(PES,DOB,DEFECTO):-doble(DOB),
                                                         DOB=="si",
                                                          peso(PES),
-                                                          PES=="alto".
+                                                          PES=="alto",DEFECTO="fruto doble";DEFECTO="no".
 
-pedunculo(_,_,_,_,_,_,_,_,PED,_,_,"pedunculo"):- pedunculo(PED), PED == "si". 
+pedunculo(PED,DEFECTO):- pedunculo(PED), PED == "si",DEFECTO="pedunculo";DEFECTO="no". 
 
-frutoGemelo(_,_,_,_,_,_,_,_,TEX,_,DOB,"fruto gemelo"):- doble(DOB),
+frutoGemelo(TEX,DOB,DEFECTO):- doble(DOB),
                                         DOB == "si", 
                                         textura(TEX), 
-                                        TEX == "rugosa".
+                                        TEX == "rugosa", DEFECTO="fruto gemelo";DEFECTO="no".
 
-madurezExcesiva(_,COL,_,_,TAM,PES,DUR,_,_,_,_,"madurez excesiva"):-coloracion(COL),
+madurezExcesiva(COL,TAM,PES,DUR,DEFECTO):-coloracion(COL),
                                             tamano(TAM),
     										peso(PES),
     										dureza(DUR),
                                             DUR=="baja",
                                             COL == "negra" ; COL == "purpura",
     										TAM == "grande",
-    										PES == "alto".
+    										PES == "alto",DEFECTO="madurez excesiva";DEFECTO="no".
 
-cicatriz(_,_,_,COB,_,_,_,_,_,CIC,_,"cicatriz"):-cobertura(COB),
+cicatriz(COB,CIC,PAR,DEFECTO):-cobertura(COB),
                                      cicatriz(CIC),
                                      COB=="baja",
-    								 CIC == "si".
+    								 CIC == "si",DEFECTO="cicatriz";DEFECTO="no".
 
-partiduraCicatrizada(_,_,_,_,_,_,_,_,_,CIC,_,PAR):- cicatriz(CIC),
+partiduraCicatrizada(CIC,PAR,DEFECTO):- cicatriz(CIC),
                                                     CIC == "si", 
                                                     partidura(PAR), 
-                                                    PAR == "si".
-perforacionCicatrizada(PER,_,_,_,_,_,_,CIC,_,_,"perforacion cicatrizada"):-perforacion(PER),
-                                                    per=="si",
+                                                    PAR == "si",DEFECTO="partidura cicatrizada";DEFECTO="no".
+perforacionCicatrizada(PER,CIC,PAR,DEFECTO):-perforacion(PER),
+                                                    PAR=="si",
                                                     cicatriz(CIC),
-                                                    CIC=="si".
+                                                    CIC=="si",DEFECTO="perforacion cicatrizada";DEFECTO="no".
 
-detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,L):-
-                frutoArrugado(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,A),
+quemaduraSolar(COL,DEFECTO):-coloracion(COL),DEFECTO="quemadura solar";DEFECTO="no".
+detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR,LISTA):-
+                frutoArrugado(TEX,A),
                 add_tail([],A,L1),
-                machucon(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,B),
+                machucon(MAN,DUR,TEX,B),
                 add_tail(L1,B,L2),
-                sinColor(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,C),
+                sinColor(COL,C),
                 add_tail(L2,C,L3),
-                magulladura(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,D),
+                magulladura(PER,D),
                 add_tail(L3,D,L4),
-                frutoDoble(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,E),
-                add_tail(L4,E,L).
+                frutoDoble(PES,DOB,E),
+                add_tail(L4,E,L5),
+                pedunculo(PED,F),
+                add_tail(L5,F,L6),
+                frutoGemelo(TEX,DOB,G),
+                add_tail(L6,G,L7),
+                madurezExcesiva(COL,TAM,PES,DUR,H),
+                add_tail(L7,H,L8),
+                cicatriz(COB,CIC,PAR,I),
+                add_tail(L8,I,L9),
+                partiduraCicatrizada(CIC,PAR,J),
+                add_tail(L9,J,L10),
+                perforacionCicatrizada(PER,CIC,PAR,K),
+                add_tail(L10,K,L11),
+                quemaduraSolar(COL,L),
+                add_tail(L11,L,L12),
+                delete_all("no",L12,LISTA).
