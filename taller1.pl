@@ -179,7 +179,6 @@ salidaEmbalaje(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,DIAMETRO,SALIDA
                           (CANTIDADDEFECTOS>=3)->SALIDA ="desecho"
                       )
                   )),
-                  
                   string_concat("linea: ",LINEA,B),
                   write(B).
                   
