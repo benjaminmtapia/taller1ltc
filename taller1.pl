@@ -93,60 +93,56 @@ delete_all(X, [T|Xs], [T|Y]) :-
     delete_all(X, Xs, Y).
 
 %DETECCIÓN DE DEFECTOS
-frutoArrugado(TEX,DEFECTO):- ((textura(TEX), TEX == "rugosa") -> DEFECTO = "fruto arrugado";
-                                                                 DEFECTO = "no"). 
+cereza(PER,COL,MAN,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR):- perforacion(PER), coloracion(COL),mancha(MAN), 
+                                                      tamano(TAM),peso(PES), dureza(DUR), textura(TEX),
+                                                      pedunculo(PED), cicatriz(CIC), doble(DOB), partidura(PAR).
 
-machucon(DUR,TEX,DEFECTO):- (
-                            (dureza(DUR), DUR == "baja",
-                            textura(TEX), TEX == "rugosa") -> DEFECTO = "machucon";
-                                                              DEFECTO = "no").
+frutoArrugado(TEX,DEFECTO):- ((TEX == "rugosa") -> DEFECTO = "fruto arrugado";
+                                                   DEFECTO = "no"). 
 
-sinColor(COL,DEFECTO):- ((coloracion(COL), COL == "rosada") -> DEFECTO = "sin color";
-                                                               DEFECTO = "no"). 
+machucon(DUR,TEX,DEFECTO):- ((DUR == "baja",
+                             TEX == "rugosa") -> DEFECTO = "machucon";
+                                                 DEFECTO = "no").
 
-magulladura(PER,DEFECTO):- ((perforacion(PER),PER == "si") -> DEFECTO = "magulladura perforada";
+sinColor(COL,DEFECTO):- ((COL == "rosada") -> DEFECTO = "sin color";
+                                              DEFECTO = "no"). 
+
+magulladura(PER,DEFECTO):- ((PER == "si") -> DEFECTO = "magulladura perforada";
                                                         DEFECTO = "no" ).
 
-frutoDoble(PES,DOB,DEFECTO):- ((doble(DOB), DOB=="si",
-                                      peso(PES),
-                                      PES=="alto") -> DEFECTO = "fruto doble";
-                                                      DEFECTO = "no").
+frutoDoble(PES,DOB,DEFECTO):- ((DOB=="si", PES=="alto") -> DEFECTO = "fruto doble";
+                                                           DEFECTO = "no").
 
-pedunculo(PED,DEFECTO):- ((pedunculo(PED), PED == "si") -> DEFECTO = "sin pedunculo";
-                                                     DEFECTO = "no"). 
+pedunculo(PED,DEFECTO):- ((PED == "si") -> DEFECTO = "sin pedunculo";
+                                           DEFECTO = "no"). 
 
-frutoGemelo(TEX,DOB,DEFECTO):- ((doble(DOB), DOB == "si", 
-                                       textura(TEX), 
-                                       TEX == "rugosa") -> DEFECTO = "fruto gemelo";
+frutoGemelo(TEX,DOB,DEFECTO):- ((DOB == "si",  
+                                 TEX == "rugosa") -> DEFECTO = "fruto gemelo";
                                                            DEFECTO ="no").
 
-madurezExcesiva(COL,TAM,PES,DUR,DEFECTO):-((coloracion(COL),tamano(TAM),peso(PES),
-                                    dureza(DUR),DUR=="baja", (COL == "negra"; 
-                                    COL == "purpura"),TAM == "grande",
-                                    PES == "alto")-> DEFECTO = "madurez excesiva";
-                                                     DEFECTO = "no").
+madurezExcesiva(COL,TAM,PES,DUR,DEFECTO):-((dureza(DUR),DUR=="baja", (COL == "negra"; 
+                                            COL == "purpura"),TAM == "grande",
+                                            PES == "alto") -> DEFECTO = "madurez excesiva";
+                                                              DEFECTO = "no").
 
-cicatriz(COB,CIC,DEFECTO):-((cobertura(COB), COB == "baja",
-                       cicatriz(CIC), CIC == "si") -> DEFECTO = "cicatriz";
-                                                      DEFECTO = "no").
+cicatriz(COB,CIC,DEFECTO):-((COB == "baja",
+                             CIC == "si") -> DEFECTO = "cicatriz";
+                                             DEFECTO = "no").
 
-partiduraCicatrizada(CIC,PAR,DEFECTO):- ((cicatriz(CIC),
-                                  CIC == "si", 
-                                  partidura(PAR), 
-                                  PAR == "si") -> DEFECTO = "partidura cicatrizada";
-                                                  DEFECTO = "no").
+partiduraCicatrizada(CIC,PAR,DEFECTO):- ((CIC == "si", 
+                                          PAR == "si") -> DEFECTO = "partidura cicatrizada";
+                                                          DEFECTO = "no").
 
-perforacionCicatrizada(PER,CIC,DEFECTO):- ((perforacion(PER),
-                                              PER=="si",
-                                              cicatriz(CIC),
-                                              CIC=="si") -> DEFECTO="perforacion cicatrizada"; 
-                                                            DEFECTO="no").
+perforacionCicatrizada(PER,CIC,DEFECTO):- ((PER=="si",
+                                            CIC=="si") -> DEFECTO="perforacion cicatrizada"; 
+                                                          DEFECTO="no").
 
-quemaduraSolar(MAN,DEFECTO):- (mancha(MAN), MAN == "quemadura de sol") -> DEFECTO = "quemadura solar"; 
-                                                                              DEFECTO="no").
+quemaduraSolar(MAN,DEFECTO):- ((MAN == "quemadura de sol") -> DEFECTO = "quemadura solar"; 
+                                                              DEFECTO = "no").
 
-detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):- 
-                                    frutoArrugado(TEX,A), 
+detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):-
+                                    cereza(PER,COL,MAN,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR) ->
+                                    (frutoArrugado(TEX,A), 
                                     add_tail([],A,L1),
                                     machucon(DUR,TEX,B), 
                                     add_tail(L1,B,L2),
@@ -167,4 +163,4 @@ detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):-
                                     perforacionCicatrizada(PER,CIC,J),
                                     add_tail(L9,J,L10),
                                     quemaduraSolar(MAN,K),
-                                    add_tail(L10,K,L).
+                                    add_tail(L10,K,L)); write("Alguna caracteristica esta mal ingresada, verifique e intente nuevamente").
