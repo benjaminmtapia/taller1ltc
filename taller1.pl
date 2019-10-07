@@ -75,7 +75,9 @@ calibre(16,"desecho").
 %perforacion, color, mancha, cobertura, tamano, peso, dureza, textura, pedunculo, cicatriz, doble
 %cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB).
 
-%Predicados
+%CLAUSULAS DE HORN
+
+
 %auxiliar para agregar elemento al final de una lista
 %fuente: https://stackoverflow.com/questions/15028831/how-do-you-append-an-element-to-a-list-in-place-in-prolog
 add_tail([],X,[X]).
