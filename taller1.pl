@@ -112,9 +112,9 @@ frutoDoble(PES,DOB,DEFECTO):-doble(DOB),
 pedunculo(PED,DEFECTO):- pedunculo(PED), PED == "si",DEFECTO="pedunculo";DEFECTO="no". 
 
 frutoGemelo(TEX,DOB,DEFECTO):- doble(DOB),
-                                        DOB == "si", 
-                                        textura(TEX), 
-                                        TEX == "rugosa", DEFECTO="fruto gemelo";DEFECTO="no".
+                               DOB == "si", 
+                               textura(TEX), 
+                               TEX == "rugosa", DEFECTO="fruto gemelo";DEFECTO="no".
 
 madurezExcesiva(COL,TAM,PES,DUR,DEFECTO):-coloracion(COL),
                                             tamano(TAM),
@@ -125,7 +125,7 @@ madurezExcesiva(COL,TAM,PES,DUR,DEFECTO):-coloracion(COL),
     										TAM == "grande",
     										PES == "alto",DEFECTO="madurez excesiva";DEFECTO="no".
 
-cicatriz(COB,CIC,PAR,DEFECTO):-cobertura(COB),
+cicatriz(COB,CIC,DEFECTO):-cobertura(COB),
                                      cicatriz(CIC),
                                      COB=="baja",
     								 CIC == "si",DEFECTO="cicatriz";DEFECTO="no".
@@ -140,6 +140,7 @@ perforacionCicatrizada(PER,CIC,PAR,DEFECTO):-perforacion(PER),
                                                     CIC=="si",DEFECTO="perforacion cicatrizada";DEFECTO="no".
 
 quemaduraSolar(COL,DEFECTO):-coloracion(COL),DEFECTO="quemadura solar";DEFECTO="no".
+
 detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR,LISTA):-
                 frutoArrugado(TEX,A),
                 add_tail([],A,L1),
@@ -157,7 +158,7 @@ detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR,LISTA):-
                 add_tail(L6,G,L7),
                 madurezExcesiva(COL,TAM,PES,DUR,H),
                 add_tail(L7,H,L8),
-                cicatriz(COB,CIC,PAR,I),
+                cicatriz(COB,CIC,I),
                 add_tail(L8,I,L9),
                 partiduraCicatrizada(CIC,PAR,J),
                 add_tail(L9,J,L10),
