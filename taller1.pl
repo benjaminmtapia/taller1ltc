@@ -8,7 +8,7 @@ coloracion("roja").
 coloracion("negra").
 coloracion("purpura").
 
-mancha("russet").
+mancha("no").
 mancha("quemadura de sol").
 
 cobertura("alto").
@@ -72,7 +72,7 @@ calibre(16,"desecho").
 %madurez excesiva, solo eso                    LISTO
 %partidura cicatrizada, partido y cicatriz     LISTO
 
-%perforacion, color, mancha, cobertura, tamano, peso, dureza, textura, pedunculo, cicatriz, doble
+%perforacion, color, mancha, cobertura, tamano, peso, dureza, textura, pedunculo, doble, cicatriz, parti
 %cereza(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L)
 
 %CLAUSULAS DE HORN
@@ -96,11 +96,10 @@ delete_all(X, [T|Xs], [T|Y]) :-
 frutoArrugado(TEX,DEFECTO):- ((textura(TEX), TEX == "rugosa") -> DEFECTO = "fruto arrugado";
                                                                  DEFECTO = "no"). 
 
-machucon(MAN,DUR,TEX,DEFECTO):- ((mancha(MAN),
-                        dureza(DUR),
-                        DUR == "baja",
-                        textura(TEX), TEX == "rugosa") -> DEFECTO = "machucon";
-                                                          DEFECTO = "no").
+machucon(DUR,TEX,DEFECTO):- (
+                            (dureza(DUR), DUR == "baja",
+                            textura(TEX), TEX == "rugosa") -> DEFECTO = "machucon";
+                                                              DEFECTO = "no").
 
 sinColor(COL,DEFECTO):- ((coloracion(COL), COL == "rosada") -> DEFECTO = "sin color";
                                                                DEFECTO = "no"). 
@@ -140,14 +139,16 @@ partiduraCicatrizada(CIC,PAR,DEFECTO):- ((cicatriz(CIC),
 perforacionCicatrizada(PER,CIC,DEFECTO):- ((perforacion(PER),
                                               PER=="si",
                                               cicatriz(CIC),
-                                              CIC=="si") -> DEFECTO="perforacion cicatrizada"; DEFECTO="no").
+                                              CIC=="si") -> DEFECTO="perforacion cicatrizada"; 
+                                                            DEFECTO="no").
 
-quemaduraSolar(COL,DEFECTO):-coloracion(COL) -> DEFECTO = "quemadura solar"; DEFECTO="no".
+quemaduraSolar(MAN,DEFECTO):- (mancha(MAN), MAN == "quemadura de sol") -> DEFECTO = "quemadura solar"; 
+                                                                              DEFECTO="no").
 
 detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):- 
                                     frutoArrugado(TEX,A), 
                                     add_tail([],A,L1),
-                                    machucon(MAN,DUR,TEX,B), 
+                                    machucon(DUR,TEX,B), 
                                     add_tail(L1,B,L2),
                                     sinColor(COL,C), 
                                     add_tail(L2,C,L3),
@@ -165,5 +166,5 @@ detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):-
                                     add_tail(L8,I,L9),
                                     perforacionCicatrizada(PER,CIC,J),
                                     add_tail(L9,J,L10),
-                                    quemaduraSolar(COL,K),
+                                    quemaduraSolar(MAN,K),
                                     add_tail(L10,K,L).
