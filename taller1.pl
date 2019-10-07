@@ -42,22 +42,23 @@ cicatriz("no").
 partidura("si").
 partidura("no").
 
-calibre(1,18).
-calibre(2,19).
-calibre(3,20).
-calibre(4,21).
-calibre(5,22).
-calibre(6,23).
-calibre(7,24).
-calibre(8,25).
-calibre(9,26).
-calibre(10,27).
-calibre(11,28).
-calibre(12,29).
-calibre(13,30).
-calibre(14,31).
-calibre(15,32).
-calibre(16,"desecho").
+%calibre(salida,diametro,tamano)
+calibre(1,18,"pequeño").
+calibre(2,19,"pequeño").
+calibre(3,20,"pequeño").
+calibre(4,21,"pequeño").
+calibre(5,22,"pequeño").
+calibre(6,23,"mediano").
+calibre(7,24,"mediano").
+calibre(8,25,"mediano").
+calibre(9,26,"mediano").
+calibre(10,27,"mediano").
+calibre(11,28,"grande").
+calibre(12,29,"grande").
+calibre(13,30,"grande").
+calibre(14,31,"muy grande").
+calibre(15,32,"muy grande").
+calibre(16,"desecho","muy grande").
 
 
 %machucon debe estar manchada, rugosa y blanda LISTO
@@ -91,6 +92,9 @@ delete_all(X, [X|Xs], Y) :-
 delete_all(X, [T|Xs], [T|Y]) :-
     dif(X, T),
     delete_all(X, Xs, Y).
+count([],0).
+count([1|T],N) :- count(T,N1), N is N1 + 1.
+count([X|T],N) :- X \= 1, count(T,N).
 
 %DETECCIÓN DE DEFECTOS
 cereza(PER,COL,MAN,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR):- perforacion(PER), coloracion(COL),mancha(MAN), 
@@ -164,3 +168,18 @@ detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):-
                                     add_tail(L9,J,L10),
                                     quemaduraSolar(MAN,K),
                                     add_tail(L10,K,L)); write("Alguna caracteristica esta mal ingresada, verifique e intente nuevamente").
+
+
+salidaEmbalaje(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,DIAMETRO,SALIDA):-
+                  detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L),
+                  length(L,CANTIDADDEFECTOS),
+                  calibre(LINEA,DIAMETRO,TAMANO),
+                  (( TAMANO\=="pequeño", CANTIDADDEFECTOS=<1 )->  SALIDA ="exportacion";(
+                   (TAMANO=="pequeño", CANTIDADDEFECTOS=<2)-> SALIDA ="fruto comercial";(
+                          (CANTIDADDEFECTOS>=3)->SALIDA ="desecho"
+                      )
+                  )),
+                  
+                  string_concat("linea: ",LINEA,B),
+                  write(B).
+                  
