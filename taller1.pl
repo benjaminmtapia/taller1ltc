@@ -13,7 +13,7 @@ mancha("quemadura de sol").
 
 cobertura("alto").
 cobertura("medio").
-cobertura("bajo").
+cobertura("baja").
 
 tamano("grande").
 tamano("medio").
@@ -73,13 +73,13 @@ calibre(16,"desecho").
 %partidura cicatrizada, partido y cicatriz     LISTO
 
 %perforacion, color, mancha, cobertura, tamano, peso, dureza, textura, pedunculo, cicatriz, doble
-%cereza(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB).
+%cereza(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L)
 
 %Predicados
 %auxiliar para agregar elemento al final de una lista
 %fuente: https://stackoverflow.com/questions/15028831/how-do-you-append-an-element-to-a-list-in-place-in-prolog
 add_tail([],X,[X]).
-add_tail([H|T],X,[H|L]):-add_tail(T,X,L).
+add_tail([H|T],X,[H|L]):- add_tail(T,X,L).
 
 %auxiliar para realizar delete mapping en una lista
 %fuente https://www2.cs.arizona.edu/~collberg/Teaching/372/2005/Html/Html-21/
@@ -164,3 +164,31 @@ detectarDefectos(PER,COL,MAN,COB,TAM,PES,DUR,TEX,PED,CIC,DOB,PAR,LISTA):-
                 quemaduraSolar(COL,L),
                 add_tail(L11,L,L12),
                 delete_all("no",L12,LISTA).
+
+cicatriz(COB,CIC,X):-((cobertura(COB), COB == "baja",
+                       cicatriz(CIC), CIC == "si") -> X = "cicatriz";
+                                                     X = "no").
+
+partiduraCicatrizada(CIC,PAR,X):- ((cicatriz(CIC),
+                                  CIC == "si", 
+                                  partidura(PAR), 
+                                  PAR == "si") -> X = "partidura cicatrizada";
+                                                  X = "no").
+
+perforacionCicatrizada(PER,CIC,X):- ((perforacion(PER),
+                                    per=="si",
+                                    cicatriz(CIC),
+                                    CIC=="si") -> X = "perforacion cicatrizada";
+                                                  X = "no").
+
+detectarDefectos(PER,COL,MAN,TAM,PES,DUR,TEX,PED,[CIC,COB],DOB,PAR,L):- 
+                                    frutoArrugado(TEX,A), add_tail([],A,L1),
+                                    machucon(MAN,DUR,TEX,B), add_tail(L1,B,L2),
+                                    sinColor(COL,C), add_tail(L2,C,L3),
+                                    magulladura(PER,D), add_tail(L3,D,L4),
+                                    frutoDoble(PES,DOB,E),add_tail(L4,E,L5),
+                                    pedunculo(PED,F), add_tail(L5,F,L6),
+                                    madurezExcesiva(COL,TAM,PES,DUR,G), add_tail(L6,G,L7),
+                                    cicatriz(COB,CIC,H),add_tail(L7,H,L8),
+                                    partiduraCicatrizada(CIC,PAR,I), add_tail(L8,I,L9),
+                                    perforacionCicatrizada(PER,CIC,J), add_tail(L9,J,L).
