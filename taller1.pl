@@ -105,7 +105,7 @@ machucon(MAN,DUR,TEX,DEFECTO):- ((mancha(MAN),
 sinColor(COL,DEFECTO):- ((coloracion(COL), COL == "rosada") -> DEFECTO = "sin color";
                                                                DEFECTO = "no"). 
 
-magulladura(PER,DEFECTO):- ((perforacion(PER),PER == "si") -> DEFECTO = "magulladura";
+magulladura(PER,DEFECTO):- ((perforacion(PER),PER == "si") -> DEFECTO = "magulladura perforada";
                                                         DEFECTO = "no" ).
 
 frutoDoble(PES,DOB,DEFECTO):- ((doble(DOB), DOB=="si",
