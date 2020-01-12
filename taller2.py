@@ -3,14 +3,11 @@ import skfuzzy as fuzz
 import matplotlib.pyplot
 from skfuzzy import control as ctrl
 
-def Forma(Diametro,Altura):
-    forma = Diametro/Altura
-    return forma
 def Salida(calibre):
     salida = calibre-17
     return salida
 
-def Reglas(forma,firmezaPulpa,coberturaManchas,Comercializacion):
+def Reglas(forma,firmeza,cobertura,comercializacion):
     rule1 = ctrl.Rule(forma['Angosta'] & firmeza['Verde'] & cobertura['Leve'],comercializacion['Exportacion'])
     rule2 = ctrl.Rule(forma['Angosta'] & firmeza['Verde'] & cobertura['Parcial'],comercializacion['Comercial'])
     rule3 = ctrl.Rule(forma['Angosta'] & firmeza['Verde'] & cobertura['Completa'],comercializacion['Desecho'])
@@ -91,7 +88,7 @@ def escribirArchivo(altura,diametro,cobertura,forma,firmeza,comercializacion,sal
 
 
 #main
-altura,diametro,firmeza,cobertura = recibirParametros()
+input_altura,input_diametro,input_firmeza,input_cobertura = recibirParametros()
 cobertura,forma,firmeza = Antecedentes()
 comercializacion = Consecuente()
 reglas = Reglas(forma,firmeza,cobertura,comercializacion)
@@ -100,9 +97,11 @@ aplicacionReglas = ctrl.ControlSystem(reglas)
 #aplicar reglas
 simular = ctrl.ControlSystemSimulation(aplicacionReglas)
 
-simular.input['cobertura'] = cobertura
-simular.input['forma'] = Forma(diametro,altura)
-simular.input['firmeza'] = firmeza
+simular.input['forma'] = float(input_diametro)/float(input_altura)
+simular.input['firmeza'] = float(input_firmeza)
+simular.input['cobertura'] = float(input_cobertura)
 simular.compute()
 
-print(simular)
+resultado = int(simular.output['comercializacion'])
+print(resultado)
+#print(simular)
