@@ -102,6 +102,15 @@ simular.input['firmeza'] = float(input_firmeza)
 simular.input['cobertura'] = float(input_cobertura)
 simular.compute()
 
-resultado = int(simular.output['comercializacion'])
+resultado = simular.output['comercializacion']
+
+#Graficar antecedentes
+
+cobertura.view(sim=simular)
+forma.view(sim=simular)
+firmeza.view(sim=simular)
+
+#Grafica de consecuente
+test = comercializacion.view(sim=simular)
+plt.show()
 print(resultado)
-#print(simular)
