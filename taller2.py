@@ -40,15 +40,15 @@ def Reglas(forma,firmeza,cobertura,comercializacion):
 def Antecedentes():
     cobertura = ctrl.Antecedent(np.arange(0,100,5),'cobertura')
     firmeza = ctrl.Antecedent(np.arange(0,100,5),'firmeza')
-    forma = ctrl.Antecedent(np.arange(0,100,5),'forma')
+    forma = ctrl.Antecedent(np.arange(0, 3), 'forma')
 
     cobertura['Leve'] = fuzz.trimf(cobertura.universe,[0,15,33])
     cobertura['Parcial'] = fuzz.trimf(cobertura.universe,[33,45,66])
     cobertura['Completa'] = fuzz.trimf(cobertura.universe,[66,88,100])
 
-    forma['Angosta'] = fuzz.trimf(forma.universe,[0,15,33])
-    forma['Normal'] = fuzz.trimf(forma.universe,[33,45,66])
-    forma['Ancha'] = fuzz.trimf(forma.universe,[66,88,100])
+    forma['Angosta'] = fuzz.trapmf(forma.universe, [0, 0, 0.5, 1])
+    forma['Normal'] = fuzz.trapmf(forma.universe, [1, 1, 1.5, 2])
+    forma['Ancha'] = fuzz.trapmf(forma.universe, [2, 2, 2.5, 3])
 
     firmeza['Verde'] = fuzz.trimf(firmeza.universe,[0,15,33])
     firmeza['Madura'] = fuzz.trimf(firmeza.universe,[33,45,66])
