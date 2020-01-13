@@ -117,11 +117,11 @@ def interpretarPertenencia(forma, firmeza, cobertura, simulacion):
 
     # Interpretar firmeza
     if firmeza < 33:
-        firmeza_output = "Verde"
+        firmeza_output = "Podrida"
     elif firmeza >= 33 and firmeza < 66:
         firmeza_output = "Madura"
     else:
-        firmeza_output = "Podrida"
+        firmeza_output = "Verde"
 
     # Interpretar cobertura
     if cobertura < 33:
