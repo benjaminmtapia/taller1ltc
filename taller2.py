@@ -81,7 +81,6 @@ def recibirParametros():
 
 def escribirArchivo(calibre, forma, firmeza, cobertura, simulacion):
     valores_interpretados = interpretarPertenencia(forma, firmeza, cobertura, simulacion)
-    print(valores_interpretados)
 
     nombreArchivo = "Cereza_" + str(calibre) + "_" + str(firmeza) + "_" + str(cobertura)+".txt"
     archivo = open(nombreArchivo, "w")
@@ -108,7 +107,6 @@ def graficarResultados(cobertura, forma, firmeza, comercializacion,simulacion):
 
 def interpretarPertenencia(forma, firmeza, cobertura, simulacion):
     resultado = simulacion.output['comercializacion']
-    print(resultado)
     #Interpretar Forma
     if forma <= 1:
         forma_output = "Angosta"
