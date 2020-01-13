@@ -116,23 +116,23 @@ def interpretarPertenencia(forma, firmeza, cobertura, simulacion):
         forma_output = "Ancha"
 
     # Interpretar firmeza
-    if firmeza <= 33:
+    if firmeza < 33:
         firmeza_output = "Verde"
-    elif firmeza > 33 and firmeza <= 66:
+    elif firmeza >= 33 and firmeza < 66:
         firmeza_output = "Madura"
     else:
         firmeza_output = "Podrida"
 
     # Interpretar cobertura
-    if cobertura <= 33:
+    if cobertura < 33:
         cobertura_output = "Leve"
-    elif cobertura > 33 and cobertura <= 66:
+    elif cobertura >= 33 and cobertura < 66:
         cobertura_output = "Parcial"
     else:
         cobertura_output = "Completa"
 
     # Interpretar comercializacion
-    if resultado <= 33:
+    if resultado < 33:
         comercializacion_output = "Desecho"
     elif resultado >= 33 and resultado < 66:
         comercializacion_output = "Comercial"
