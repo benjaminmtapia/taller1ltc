@@ -3,12 +3,21 @@ import skfuzzy as fuzz
 import matplotlib.pyplot as plt
 from skfuzzy import control as ctrl
 
-
+'''
+    Entrada: El calibre de la fruta
+    Proceso: Según el calibre, entrega la salida correspondiente a ese calibre
+    Salida: Salida asociada al calibre. 
+'''
 def Salida(calibre):
     salida = calibre - 17
     return str(salida)
 
 
+'''
+    Entrada: Los antecedentes (forma, firmeza, cobertura) y el consecuente (comercialización)
+    Proceso: Define la regla según los antecedentes y el consecuente entregado
+    Salida: Retorna un arreglo con todas las reglas.
+'''
 def Reglas(forma, firmeza, cobertura, comercializacion):
     rule1 = ctrl.Rule(forma['Angosta'] & firmeza['Verde'] & cobertura['Leve'], comercializacion['Exportacion'])
     rule2 = ctrl.Rule(forma['Angosta'] & firmeza['Verde'] & cobertura['Parcial'], comercializacion['Comercial'])
@@ -41,6 +50,10 @@ def Reglas(forma, firmeza, cobertura, comercializacion):
             rule15, rule16, rule17, rule18, rule19, rule20, rule21, rule22, rule23, rule24, rule25, rule26, rule27]
 
 
+'''
+    Proceso: Define los rangos y las funciones de pertencencia para los antecedentes, estos antecedentes son cobertura, firmeza y forma
+    Salida: Retorna la función de pertenencia asociada a cada antecedente
+'''
 def Antecedentes():
     cobertura = ctrl.Antecedent(np.arange(0, 100, 5), 'cobertura')
     firmeza = ctrl.Antecedent(np.arange(0, 100, 5), 'firmeza')
@@ -61,6 +74,10 @@ def Antecedentes():
     return cobertura, forma, firmeza
 
 
+'''
+    Proceso: Define los rangos y las funciones de pertencencia para el consecuente, que es la comercialización
+    Salida: Retorna la función de pertenencia asociada al consecuente
+'''
 def Consecuente():
     comercializacion = ctrl.Consequent(np.arange(0, 100, 1), 'comercializacion')
     comercializacion['Desecho'] = fuzz.trimf(comercializacion.universe, [0, 15, 33])
@@ -70,6 +87,10 @@ def Consecuente():
     return comercializacion
 
 
+'''
+    Proceso: Se encarga de pedir los datos de la cereza que serán aplicados en el programa
+    Salida: Retorna los datos que el usuario ingresó
+'''
 def recibirParametros():
     # altura, diametro, transparencia, cobertura
     altura = input("ingrese altura del fruto en mm: ")
@@ -79,6 +100,11 @@ def recibirParametros():
     return float(altura), float(diametro), float(firmeza), float(cobertura)
 
 
+'''
+    Entrada: Los datos necesarios para que se escriba el archivo de salida con los resultados
+    Proceso: Convierte los datos númericos a un valor linguistico y los escribe en un archivo de salida para que se conozcam
+             los resultados a los que se llegaron
+'''
 def escribirArchivo(calibre, forma, firmeza, cobertura, simulacion):
     valores_interpretados = interpretarPertenencia(forma, firmeza, cobertura, simulacion)
 
@@ -93,6 +119,10 @@ def escribirArchivo(calibre, forma, firmeza, cobertura, simulacion):
     archivo.write("Numero de Salida: " + Salida(calibre) + "\n")
 
 
+'''
+    Entrada: El resultado obtenido con lógica difusa aplicado en el programa y los antecedentes y consecuentes utilizados
+    Proceso: Grafica los resultados de la defuzzificacion
+'''    
 def graficarResultados(cobertura, forma, firmeza, comercializacion,simulacion):
 
     # Graficar antecedentes
@@ -105,6 +135,12 @@ def graficarResultados(cobertura, forma, firmeza, comercializacion,simulacion):
     plt.show()
 
 
+'''
+    Entrada: Los valores númericos a convertir a un valor linguistico, es decir a defuzzificar
+    Proceso: Según el valor númerico de la entrada, se le interpreta para pasar a un valor linguistico, es decir se 
+    pasa de números a palabras según los intervalos definidos en los antecedentes y consecuentes
+    Salida: Entrega los valores defuzzificados
+'''  
 def interpretarPertenencia(forma, firmeza, cobertura, simulacion):
     resultado = simulacion.output['comercializacion']
     #Interpretar Forma
@@ -142,6 +178,12 @@ def interpretarPertenencia(forma, firmeza, cobertura, simulacion):
     return forma_output, firmeza_output, cobertura_output, comercializacion_output
 
 
+'''
+    Entrada: Los valores númericos a fusificar
+    Proceso: Los valores de entradas se fusifican según los intervalos definidos más arriba, se le aplican las reglas 
+    y la lógica difusa para saber si el fruto es exportable, comercial o desecho
+    Salida: Los resultados obtenidos del proceso de fusificación
+'''
 def fusificar(input_forma, input_firmeza, input_cobertura):
     # Definición de antecedentes y consecuentes
     cobertura, forma, firmeza = Antecedentes()
@@ -167,6 +209,9 @@ def fusificar(input_forma, input_firmeza, input_cobertura):
     return simular
 
 
+'''
+   Proceso: Se encarga de llamar a las funciones necesarias para el funcionamiento del programa
+'''
 def main():
     # Ingreso de parámetros por pantalla
     input_altura, input_diametro, input_firmeza, input_cobertura = recibirParametros()
